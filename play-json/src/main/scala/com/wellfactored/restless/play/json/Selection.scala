@@ -35,7 +35,7 @@ object Selection {
     }
   }
 
-  def selectJson[T: Writes, B](ts: Seq[T], qo: Option[Query], eo: Option[List[Path]], max_results: Option[Int])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Seq[JsObject] = {
+  def selectJson[T: Writes, B](ts: Seq[T], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Seq[JsObject] = {
 
     val projection: T => JsObject = eo.map { paths =>
       new JsonProjector[T](paths.map(_.names)).project(_)
@@ -43,7 +43,7 @@ object Selection {
 
     ts.filter(qo)
       .sortBy(sortKey)
-      .limit(max_results)
+      .limit(maxResults)
       .map(projection)
   }
 }

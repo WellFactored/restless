@@ -1,6 +1,7 @@
 package com.wellfactored.restless.play.json
 
 import play.api.libs.json._
+import com.wellfactored.restless.QueryAST._
 
 /**
   * This is an execution engine to apply a Query AST to a document in the form of a JsObject.
@@ -8,9 +9,6 @@ import play.api.libs.json._
   * TODO: combine SEQ/SNEQ with EQ/NEQ
   */
 object JsonQuerying {
-
-  import com.wellfactored.restless.QueryAST._
-
   def query(q: Query)(implicit doc: JsObject): Boolean = {
     q match {
       case SEQ(path, s) => testString(path)(_ == s)

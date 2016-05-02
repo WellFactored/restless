@@ -1,102 +1,10 @@
 package com.wellfactored.restless
 
-import atto.Atto._
-import atto.ParseResult._
 import atto._
-
-import scala.annotation.tailrec
-import scala.io.StdIn
-
-object QueryParserApp extends App {
-  repl()
-
-  @tailrec
-  def repl(): Unit = {
-    // TODO: Replace next three lines with `scala.Predef.readLine(text: String, args: Any*)`
-    // once BUG https://issues.scala-lang.org/browse/SI-8167 is fixed
-    print("---\nEnter expression > ")
-    Console.out.flush()
-    StdIn.readLine() match {
-      case "" =>
-      case line =>
-        QueryParser.query.parseOnly(line) match {
-          case Fail(_, _, err) => println(err)
-          case Partial(_) =>
-          case Done(_, p) => println("Result: " + p)
-        }
-        repl()
-    }
-  }
-}
-
-// our abstract syntax tree model
-object QueryAST {
-
-  sealed trait Query
-
-  case class Path(names: List[String])
-
-  sealed trait NumberRef
-
-  case class NumberConstant(d: Double) extends NumberRef
-
-  case class NumberPath(p: Path) extends NumberRef
-
-  sealed trait Comparison extends Query
-
-  sealed trait NumberComparison extends Comparison
-
-  case class GT(lhs: Path, rhs: NumberRef) extends NumberComparison
-
-  case class GE(lhs: Path, rhs: NumberRef) extends NumberComparison
-
-  case class LT(lhs: Path, rhs: NumberRef) extends NumberComparison
-
-  case class LE(lhs: Path, rhs: NumberRef) extends NumberComparison
-
-  case class EQ(lhs: Path, rhs: NumberRef) extends NumberComparison
-
-  case class NEQ(lhs: Path, rhs: NumberRef) extends NumberComparison
-
-  sealed trait StringComparison extends Comparison
-
-  case class SEQ(lhs: Path, rhs: String) extends StringComparison
-
-  case class SNEQ(lhs: Path, rhs: String) extends StringComparison
-
-  case class StartsWith(lhs: Path, rhs: String) extends StringComparison
-
-  case class EndsWith(lhs: Path, rhs: String) extends StringComparison
-
-  case class Contains(lhs: Path, rhs: String) extends StringComparison
-
-  sealed trait Conjunction extends Query
-
-  case class AND(lhs: Query, rhs: Query) extends Conjunction
-
-  case class OR(lhs: Query, rhs: Query) extends Conjunction
-
-  trait Conj {
-    def make(left: Query, right: Query): Conjunction
-  }
-
-  object Conj {
-
-    case object and extends Conj {
-      override def make(left: Query, right: Query): Conjunction = AND(left, right)
-    }
-
-    case object or extends Conj {
-      override def make(left: Query, right: Query): Conjunction = OR(left, right)
-    }
-
-  }
-
-}
+import Atto._
+import com.wellfactored.restless.QueryAST._
 
 object QueryParser extends Whitespace {
-
-  import QueryAST._
 
   lazy val query: Parser[Query] = {
     conjunction.t | comparison.t <~ endOfInput
