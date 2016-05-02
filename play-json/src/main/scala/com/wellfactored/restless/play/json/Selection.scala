@@ -1,7 +1,8 @@
 package com.wellfactored.restless.play.json
 
 import com.wellfactored.restless.QueryAST.{Path, Query}
-import play.api.libs.json.{JsObject, Json, Writes}
+import play.api.libs.json.{JsObject, JsValue, Json, Writes}
+
 import scala.language.implicitConversions
 
 object Selection {
@@ -35,9 +36,9 @@ object Selection {
     }
   }
 
-  def selectJson[T: Writes, B](ts: Seq[T], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Seq[JsObject] = {
+  def selectJson[T: Writes, B](ts: Seq[T], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Seq[JsValue] = {
 
-    val projection: T => JsObject = eo.map { paths =>
+    val projection: T => JsValue = eo.map { paths =>
       new JsonProjector[T](paths.map(_.names)).project(_)
     }.getOrElse(new JsonIdentity[T].project(_))
 
