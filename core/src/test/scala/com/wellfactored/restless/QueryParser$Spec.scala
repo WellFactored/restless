@@ -3,13 +3,12 @@ package com.wellfactored.restless
 import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.implicitConversions
+import QueryAST._
+import QueryParser._
+import atto.Atto._
+import atto.ParseResult._
 
 class QueryParser$Spec extends FlatSpec with Matchers {
-
-  import QueryAST._
-  import QueryParser._
-  import atto.Atto._
-  import atto.ParseResult._
 
   "identifier" should "match a" in {
     identifier.parseOnly("a") shouldBe Done("", "a")
