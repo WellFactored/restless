@@ -11,11 +11,11 @@ import com.wellfactored.restless.QueryAST._
 object JsonQuerying {
   def query(q: Query)(implicit doc: JsObject): Boolean = {
     q match {
-      case SEQ(path, s) => testString(path)(_ == s)
-      case SNEQ(path, s) => testString(path)(_ != s)
-      case StartsWith(path, s) => testString(path)(_.startsWith(s))
-      case EndsWith(path, s) => testString(path)(_.endsWith(s))
-      case Contains(path, s) => testString(path)(_.contains(s))
+      case SEQ(path, s) => testString(path)(_.equalsIgnoreCase(s))
+      case SNEQ(path, s) => testString(path)(v => !v.equalsIgnoreCase(s))
+      case StartsWith(path, s) => testString(path)(_.toUpperCase.startsWith(s.toUpperCase))
+      case EndsWith(path, s) => testString(path)(_.toUpperCase.endsWith(s.toUpperCase))
+      case Contains(path, s) => testString(path)(_.toUpperCase.contains(s.toUpperCase))
 
       case EQ(path, ref) => testNumber(path, ref)(_ == _)
       case NEQ(path, ref) => testNumber(path, ref)(_ != _)

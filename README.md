@@ -56,19 +56,18 @@ or something a bit more complex like `x > y`. It also supports compound expressi
 
 Numeric queries can include all the usual comparison operators, namely `=`, `!=`, `<`, `>`, `<=` and `>=`.
 
-String comparisons can be:
+String comparisons are case-insensitive and can be one of:
 * `=`
 * `!=`
-* `starts-with`
-* `ends-with`
+* `starts-with` or `starts with`
+* `ends-with` or `ends with`
 * `contains`
 
 ## Todo
 There are still some arbitrary restrictions in the query syntax. For example, you cannot put a constant on the left-hand-side
 of a comparison at the moment.
 
-String comparisons are currently case-sensitive. I am planning to change them to be case-insensitive, and also to remove
-the hyphens from the `starts-with` and `ends-with` to make the more natural (i.e. `starts with` and `ends with`).
+Paths to string values can only be compared against string literals - it should be possible to compare them against other paths. 
 
 ## Thanks
 Many thanks to Rob Norris (tpolecat) for the lovely `atto` parser and his help when I ran into some recursion issues.

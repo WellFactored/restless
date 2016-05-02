@@ -46,8 +46,16 @@ class QueryParser$Spec extends FlatSpec with Matchers {
     stringComparison.parseOnly("""a starts-with "foo"""") shouldBe Done("", StartsWith(Path(List("a")), "foo"))
   }
 
+  it should """match a starts with "foo"""" in {
+    stringComparison.parseOnly("""a starts with "foo"""") shouldBe Done("", StartsWith(Path(List("a")), "foo"))
+  }
+
   it should """match a ends-with "foo"""" in {
     stringComparison.parseOnly("""a ends-with "foo"""") shouldBe Done("", EndsWith(Path(List("a")), "foo"))
+  }
+
+  it should """match a ends with "foo"""" in {
+    stringComparison.parseOnly("""a ends with "foo"""") shouldBe Done("", EndsWith(Path(List("a")), "foo"))
   }
 
   it should """match a contains "foo"""" in {

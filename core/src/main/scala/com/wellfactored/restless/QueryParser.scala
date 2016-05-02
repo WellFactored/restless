@@ -42,7 +42,9 @@ object QueryParser extends Whitespace {
     pairByT(path, char('='), stringLiteral).map(SEQ.tupled) |
       pairByT(path, string("!="), stringLiteral).map(SNEQ.tupled) |
       pairByT(path, string("starts-with"), stringLiteral).map(StartsWith.tupled) |
+      pairByT(path, string("starts with"), stringLiteral).map(StartsWith.tupled) |
       pairByT(path, string("ends-with"), stringLiteral).map(EndsWith.tupled) |
+      pairByT(path, string("ends with"), stringLiteral).map(EndsWith.tupled) |
       pairByT(path, string("contains"), stringLiteral).map(Contains.tupled)
   }.named("string comparison")
 
