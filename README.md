@@ -1,5 +1,5 @@
+[![Build Status](https://travis-ci.org/WellFactored/restless.svg?branch=master)](https://travis-ci.org/WellFactored/restless)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b8b7e2b4e1054aca93e5bec881f0183b)](https://www.codacy.com/app/doug/restless?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=WellFactored/restless&amp;utm_campaign=Badge_Grade)
-
 
 # restless
 Get less from your REST! A small scala/play library for filtering and projecting json results from REST calls
