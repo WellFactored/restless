@@ -8,7 +8,7 @@ Get less from your REST! A small scala/play library for filtering and projecting
 
 In your build.sbt include:
 
-`libraryDependencies += "com.wellfactored" %% "restless" % "0.1.2"`
+`libraryDependencies += "com.wellfactored" %% "restless" % "0.1.4"`
 
 ## Separate components
 restless is implemented as `restless-core` and `restless-play-json` components. The `core` package implements the 
