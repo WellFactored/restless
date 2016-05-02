@@ -12,11 +12,11 @@ publishTo in ThisBuild := {
 
 pomIncludeRepository in ThisBuild := { _ => false }
 
-licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
+licenses in ThisBuild := Seq("MIT" -> url("https://opensource.org/licenses/MIT"))
 
-homepage := Some(url("https://github.com/wellfactored/restless"))
+homepage in ThisBuild := Some(url("https://github.com/wellfactored/restless"))
 
-scmInfo := Some(ScmInfo(url("http://github.com/wellfactored/restless"), "scm:git@github.com:wellfactored/restless.git"))
+scmInfo in ThisBuild := Some(ScmInfo(url("http://github.com/wellfactored/restless"), "scm:git@github.com:wellfactored/restless.git"))
 
 pomExtra in ThisBuild := (
   <developers>
