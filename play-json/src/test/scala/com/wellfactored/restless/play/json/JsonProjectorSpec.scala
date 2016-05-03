@@ -3,7 +3,7 @@ package com.wellfactored.restless.play.json
 import org.scalatest.{FlatSpec, Matchers}
 import play.api.libs.json.{JsObject, Json}
 
-class JsonProjectorTest extends FlatSpec with Matchers {
+class JsonProjectorSpec extends FlatSpec with Matchers {
 
   "JsonProjector" should "extract a value from a Json object" in {
     val paths = List(List("a"))

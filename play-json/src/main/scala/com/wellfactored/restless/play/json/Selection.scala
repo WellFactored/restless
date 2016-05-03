@@ -1,7 +1,7 @@
 package com.wellfactored.restless.play.json
 
 import com.wellfactored.restless.QueryAST.{Path, Query}
-import play.api.libs.json.{JsObject, JsValue, Json, Writes}
+import play.api.libs.json._
 
 import scala.language.implicitConversions
 
@@ -42,9 +42,18 @@ object Selection {
       new JsonProjector[T](paths.map(_.names)).project(_)
     }.getOrElse(new JsonIdentity[T].project(_))
 
+    def isEmpty(jv: JsValue): Boolean = jv match {
+      case JsObject(e) if e.isEmpty => true
+      case JsNull => true
+      case _ => false
+    }
+
+    def nonEmpty(jv: JsValue): Boolean = !isEmpty(jv)
+
     ts.filter(qo)
       .sortBy(sortKey)
-      .limit(maxResults)
       .map(projection)
+      .filter(nonEmpty)
+      .limit(maxResults)
   }
 }
