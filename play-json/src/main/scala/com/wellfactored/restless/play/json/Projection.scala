@@ -34,7 +34,13 @@ class JsonProjector[T: Writes](paths: List[List[String]]) extends Projection[T, 
   def projectJs(value: JsValue): JsValue = {
     val parts = paths.flatMap { path =>
       // Use the components of this path to walk down the json structure
-      val v = path.foldLeft(value) { case (j, p) => (j \ p).getOrElse(JsNull) }
+      val v = path.foldLeft(value) {
+        case (j, p) => j \ p match {
+          case JsDefined(JsObject(e)) if e.isEmpty => JsNull
+          case JsDefined(jv) => jv
+          case JsUndefined() => JsNull
+        }
+      }
       v match {
         case JsNull => None
         // if the path has given us a json value then create a new json object structure

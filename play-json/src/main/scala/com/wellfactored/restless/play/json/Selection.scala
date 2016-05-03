@@ -7,13 +7,13 @@ import scala.language.implicitConversions
 
 object Selection {
 
-  implicit class SelectionOps[T: Writes](xs: Seq[T]) {
-    def limit(l: Option[Int]): Seq[T] = l match {
+  implicit class SelectionOps[T: Writes](xs: Iterable[T]) {
+    def limit(l: Option[Int]): Iterable[T] = l match {
       case Some(i) => xs.take(i)
       case None => xs
     }
 
-    def where(qo: Option[Query]): Seq[T] = qo match {
+    def where(qo: Option[Query]): Iterable[T] = qo match {
       case None => xs
       case Some(q) => xs.filter { x =>
         Json.toJson(x) match {
@@ -36,7 +36,7 @@ object Selection {
     }
   }
 
-  def selectJson[T: Writes, B](ts: Seq[T], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Seq[JsValue] = {
+  def selectJson[T: Writes, B](ts: Iterable[T], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Iterable[JsValue] = {
 
     val projection: T => JsValue = eo.map { paths =>
       new JsonProjector[T](paths.map(_.names)).project(_)
@@ -50,10 +50,11 @@ object Selection {
 
     def nonEmpty(jv: JsValue): Boolean = !isEmpty(jv)
 
-    ts.filter(qo)
+    ts.filter(qo).toSeq
       .sortBy(sortKey)
       .map(projection)
       .filter(nonEmpty)
+      .distinct
       .limit(maxResults)
   }
 }
