@@ -128,4 +128,8 @@ class QueryParser$Spec extends FlatSpec with Matchers {
     // Checking that this does not put the parser into an infinite loop
     query.parseOnly("""a starts-ith "foo"""") shouldBe a[Fail]
   }
+
+  it should "parse an 'and' expression" in {
+    query.parseOnly("""a = 1 and b = "x"""") shouldBe a[Done[_]]
+  }
 }
