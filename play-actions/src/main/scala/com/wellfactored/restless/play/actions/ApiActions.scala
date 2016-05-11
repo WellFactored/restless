@@ -70,6 +70,7 @@ object ApiActions extends BodyParsers {
 
   def extractFromJson(implicit request: Request[String]): Either[Result, Params] = {
     Try {
+      // Annoying that there is no parse that doesn't throw an exception
       Json.parse(request.body).validate[Params].fold(
         errs => Left(BadRequest(errs.toString())),
         params => Right(params)
