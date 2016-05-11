@@ -1,8 +1,8 @@
 package com.wellfactored.restless.play.actions
 
-import com.wellfactored.restless.pagination.{ItemCount, PageCount, PageNumber, ResultsPage}
+import com.wellfactored.restless.pagination.{ItemCount, PageNumber, ResultsPage}
 import com.wellfactored.restless.play.json.SearchResults
-import com.wellfactored.restless.query.QueryAST.{Path, Query}
+import com.wellfactored.restless.query.QueryAST.Path
 import play.api.libs.json._
 
 object Selector {

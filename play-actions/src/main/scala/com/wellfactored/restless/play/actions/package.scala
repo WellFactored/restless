@@ -41,6 +41,13 @@ package object actions {
     override def writes(q: Query): JsValue = JsString(QueryPrinter.print(q))
   }
 
+  /**
+    * I'm using snake-case names here as that is more conventional for the web side of things. This class
+    * represents a structure that will be passed in via json.
+    *
+    * TODO: Change the names to scala-style camel-case and implement a Json.reads that binds the snake-case
+    * names from the json
+    */
   case class Params(
                      page_number: Option[Int],
                      page_size: Option[Int],

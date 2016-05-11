@@ -68,15 +68,13 @@ object ApiActions extends BodyParsers {
     Right(Params(pageNumber, pageSize, maxResults, query.map(_.right.get), fields))
   }
 
-  def extractFromJson(implicit request: Request[String]): Either[Result, Params] = {
-    try {
-      Json.parse(request.body).validate[Params].fold(
-        errs => Left(BadRequest(errs.toString())),
-        params => Right(params)
-      )
-    } catch {
-      case NonFatal(e) => Left(BadRequest(e.getMessage))
-    }
-  }
+  def extractFromJson(implicit request: Request[String]): Either[Result, Params] = Try {
+    Json.parse(request.body).validate[Params].fold(
+      errs => Left(BadRequest(errs.toString())),
+      params => Right(params)
+    )
+  }.recover {
+    case NonFatal(e) => Left(BadRequest(e.getMessage))
+  }.get // let fatal exceptions propagate up
 
 }
