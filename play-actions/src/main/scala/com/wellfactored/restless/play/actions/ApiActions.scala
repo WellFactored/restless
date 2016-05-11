@@ -7,7 +7,7 @@ import play.api.libs.json.{JsArray, Json, Writes}
 import play.api.mvc.Results._
 import play.api.mvc._
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 
 class CollectionRequest(val request: Request[String], val params: Params) extends WrappedRequest[String](request)
@@ -68,13 +68,18 @@ object ApiActions extends BodyParsers {
     Right(Params(pageNumber, pageSize, maxResults, query.map(_.right.get), fields))
   }
 
-  def extractFromJson(implicit request: Request[String]): Either[Result, Params] = Try {
-    Json.parse(request.body).validate[Params].fold(
-      errs => Left(BadRequest(errs.toString())),
-      params => Right(params)
-    )
-  }.recover {
-    case NonFatal(e) => Left(BadRequest(e.getMessage))
-  }.get // let fatal exceptions propagate up
-
+  def extractFromJson(implicit request: Request[String]): Either[Result, Params] = {
+    Try {
+      Json.parse(request.body).validate[Params].fold(
+        errs => Left(BadRequest(errs.toString())),
+        params => Right(params)
+      )
+    }.recover {
+      case NonFatal(e) => Left(BadRequest(e.getMessage))
+    } match {
+      case Success(v) => v
+      // We've already recovered non-fatal exceptions above, re-throw fatal ones here
+      case Failure(t) => throw t
+    }
+  }
 }
