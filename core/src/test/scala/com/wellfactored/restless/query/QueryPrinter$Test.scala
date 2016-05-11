@@ -1,9 +1,9 @@
-package com.wellfactored.restless
+package com.wellfactored.restless.query
 
 import atto.Atto._
-import com.wellfactored.restless.QueryParser._
-import com.wellfactored.restless.QueryPrinter._
+import com.wellfactored.restless.query.QueryParser._
 import org.scalatest.{FlatSpec, Matchers}
+import QueryPrinter.print
 
 class QueryPrinter$Test extends FlatSpec with Matchers {
 

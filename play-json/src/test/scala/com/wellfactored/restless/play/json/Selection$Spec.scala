@@ -1,6 +1,7 @@
 package com.wellfactored.restless.play.json
 
-import com.wellfactored.restless.QueryAST.Path
+import com.wellfactored.restless.query.QueryAST
+import com.wellfactored.restless.query.QueryAST.Path
 import org.scalatest.{FlatSpec, Matchers}
 import play.api.libs.json.{JsObject, JsString, Json}
 

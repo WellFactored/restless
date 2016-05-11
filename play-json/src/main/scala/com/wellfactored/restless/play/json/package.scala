@@ -1,14 +1,14 @@
 package com.wellfactored.restless.play
 
 import atto.ParseResult.Done
-import com.wellfactored.restless.QueryAST.Query
-import com.wellfactored.restless.QueryParser
+import com.wellfactored.restless.query.QueryAST.Query
+import com.wellfactored.restless.query.{QueryParser, QueryPrinter}
 import play.api.libs.json._
 
 package object json {
 
+  import QueryPrinter._
   import atto.Atto._
-  import com.wellfactored.restless.QueryPrinter._
 
   implicit val queryFormat = new Format[Query] {
     override def reads(json: JsValue): JsResult[Query] = {

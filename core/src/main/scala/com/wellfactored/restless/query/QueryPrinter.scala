@@ -1,6 +1,6 @@
-package com.wellfactored.restless
+package com.wellfactored.restless.query
 
-import com.wellfactored.restless.QueryAST._
+import QueryAST._
 
 /**
   * Provide functions to convert a Query to it's String representation

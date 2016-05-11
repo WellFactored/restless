@@ -1,4 +1,4 @@
-package com.wellfactored.restless
+package com.wellfactored.restless.query
 
 // our abstract syntax tree model
 object QueryAST {

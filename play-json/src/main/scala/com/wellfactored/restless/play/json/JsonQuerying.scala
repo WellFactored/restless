@@ -1,7 +1,7 @@
 package com.wellfactored.restless.play.json
 
 import play.api.libs.json._
-import com.wellfactored.restless.QueryAST._
+import com.wellfactored.restless.query.QueryAST._
 
 /**
   * This is an execution engine to apply a Query AST to a document in the form of a JsObject.

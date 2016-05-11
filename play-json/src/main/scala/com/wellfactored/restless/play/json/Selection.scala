@@ -1,6 +1,6 @@
 package com.wellfactored.restless.play.json
 
-import com.wellfactored.restless.QueryAST.{Path, Query}
+import com.wellfactored.restless.query.QueryAST.{Path, Query}
 import play.api.libs.json._
 
 import scala.language.implicitConversions

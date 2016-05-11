@@ -1,11 +1,10 @@
-package com.wellfactored.restless
+package com.wellfactored.restless.query
 
+import atto.Atto._
 import atto.ParseResult.{Done, Fail, Partial}
 
 import scala.annotation.tailrec
 import scala.io.StdIn
-import atto._
-import Atto._
 
 object QueryParserApp extends App {
   repl()

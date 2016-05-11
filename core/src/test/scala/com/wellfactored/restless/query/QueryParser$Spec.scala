@@ -1,12 +1,12 @@
-package com.wellfactored.restless
+package com.wellfactored.restless.query
 
+import atto.Atto._
+import atto.ParseResult._
+import com.wellfactored.restless.query.QueryAST._
+import com.wellfactored.restless.query.QueryParser._
 import org.scalatest.{FlatSpec, Matchers}
 
 import scala.language.implicitConversions
-import QueryAST._
-import QueryParser._
-import atto.Atto._
-import atto.ParseResult._
 
 class QueryParser$Spec extends FlatSpec with Matchers {
 

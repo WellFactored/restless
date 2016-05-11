@@ -1,8 +1,8 @@
-package com.wellfactored.restless
+package com.wellfactored.restless.query
 
+import atto.Atto._
 import atto._
-import Atto._
-import com.wellfactored.restless.QueryAST._
+import com.wellfactored.restless.query.QueryAST._
 
 object QueryParser extends Whitespace {
 
