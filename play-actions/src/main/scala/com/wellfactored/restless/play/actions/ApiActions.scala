@@ -2,13 +2,13 @@ package com.wellfactored.restless.play.actions
 
 import atto.ParseResult.Done
 import com.wellfactored.restless.query.QueryAST.Path
-import com.wellfactored.restless.query.{QueryAST, QueryParser}
+import com.wellfactored.restless.query.QueryParser
 import play.api.libs.json.{JsArray, Json, Writes}
 import play.api.mvc.Results._
 import play.api.mvc._
 
-import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
+import scala.util.{Failure, Success, Try}
 
 class CollectionRequest(val request: Request[String], val params: Params) extends WrappedRequest[String](request)
 

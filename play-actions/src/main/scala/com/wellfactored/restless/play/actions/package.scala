@@ -4,7 +4,7 @@ import atto.Atto._
 import atto.ParseResult.Done
 import com.wellfactored.restless.query.QueryAST.{Path, Query}
 import com.wellfactored.restless.query.{QueryAST, QueryParser, QueryPrinter}
-import play.api.libs.json.{Json, _}
+import play.api.libs.json._
 import play.api.mvc.QueryStringBindable
 
 package object actions {
@@ -40,24 +40,4 @@ package object actions {
 
     override def writes(q: Query): JsValue = JsString(QueryPrinter.print(q))
   }
-
-  /**
-    * I'm using snake-case names here as that is more conventional for the web side of things. This class
-    * represents a structure that will be passed in via json.
-    *
-    * TODO: Change the names to scala-style camel-case and implement a Json.reads that binds the snake-case
-    * names from the json
-    */
-  case class Params(
-                     page_number: Option[Int],
-                     page_size: Option[Int],
-                     max_results: Option[Int],
-                     query: Option[Query],
-                     fields: Option[List[Path]])
-
-  object Params {
-    val empty = Params(None, None, None, None, None)
-    implicit val paramsR = Json.reads[Params]
-  }
-
 }
