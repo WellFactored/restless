@@ -2,19 +2,11 @@ package com.wellfactored.restless.play.actions
 
 import com.wellfactored.restless.pagination.{ItemCount, PageNumber, ResultsPage}
 import com.wellfactored.restless.play.json.SearchResults
-import com.wellfactored.restless.query.QueryAST.Path
 import play.api.libs.json._
 
 object Selector {
 
   import com.wellfactored.restless.play.json.Selection._
-
-  implicit val pathR = new Reads[Path] {
-    override def reads(json: JsValue): JsResult[Path] = implicitly[Reads[String]].reads(json).flatMap { js =>
-      JsSuccess(Path(js.split('.').toList), JsPath(List()))
-    }
-  }
-
 
   /**
     * Pimp out any `Iterable[T : Writes]` with a `.select` method that will use query `Params` to filter

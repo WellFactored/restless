@@ -5,7 +5,13 @@ object QueryAST {
 
   sealed trait Query
 
+  case object All extends Query
+
   case class Path(names: List[String])
+
+  object Path {
+    def apply(s: String): Path = new Path(s.split('.').toList)
+  }
 
   sealed trait NumberRef
 

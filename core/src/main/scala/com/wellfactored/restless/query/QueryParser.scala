@@ -7,7 +7,7 @@ import com.wellfactored.restless.query.QueryAST._
 object QueryParser extends Whitespace {
 
   lazy val query: Parser[Query] = {
-    conjunction.t | comparison.t <~ endOfInput
+    all.t | conjunction.t | comparison.t <~ endOfInput
   }.named("query")
 
   lazy val conjunction: Parser[Conjunction] = {
@@ -22,6 +22,8 @@ object QueryParser extends Whitespace {
 
   lazy val and = string("and") >| Conj.and
   lazy val or = string("or") >| Conj.or
+
+  lazy val all = string("all") >| All
 
   lazy val identifier: Parser[String] = {
     val startingChar: Parser[Char] = elem(c => c.isLetter || c == '_')
@@ -61,8 +63,6 @@ object QueryParser extends Whitespace {
     double -| NumberConstant |
       path -| NumberPath
   }
-
-
 }
 
 // Some extra combinators and syntax for coping with whitespace. Something like this might be

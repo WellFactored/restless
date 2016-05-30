@@ -54,11 +54,16 @@ object ApiActions extends BodyParsers {
         }
       }
     }
+
+    /*
+    * "fields" is expected to be a json array of strings. Each string is a dotted path into the
+    * results structure.
+     */
     val fields = params.get("fields").flatMap {
       _.headOption.flatMap { s =>
         Try(Json.parse(s)).toOption.flatMap { jv =>
           jv match {
-            case JsArray(vs) => Some(vs.toList.flatMap(_.validate[String].asOpt.map(f => Path(f.split('.').toList))))
+            case JsArray(vs) => Some(vs.toList.flatMap(_.validate[String].asOpt.map(Path(_))))
             case _ => None
           }
         }

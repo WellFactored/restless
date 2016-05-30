@@ -11,6 +11,7 @@ import com.wellfactored.restless.query.QueryAST._
 object JsonQuerying {
   def query(q: Query)(implicit doc: JsObject): Boolean = {
     q match {
+      case All => true
       case SEQ(path, s) => testString(path)(_.equalsIgnoreCase(s))
       case SNEQ(path, s) => testString(path)(v => !v.equalsIgnoreCase(s))
       case StartsWith(path, s) => testString(path)(_.toUpperCase.startsWith(s.toUpperCase))

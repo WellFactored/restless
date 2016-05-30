@@ -10,7 +10,7 @@ import play.api.mvc.QueryStringBindable
 package object actions {
   implicit val pathR = new Reads[Path] {
     override def reads(json: JsValue): JsResult[Path] = implicitly[Reads[String]].reads(json).flatMap { js =>
-      JsSuccess(Path(js.split('.').toList), JsPath(List()))
+      JsSuccess(Path(js), JsPath(List()))
     }
   }
 

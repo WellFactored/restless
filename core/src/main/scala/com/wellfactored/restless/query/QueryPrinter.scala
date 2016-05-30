@@ -8,6 +8,7 @@ import QueryAST._
 object QueryPrinter {
   def print(q: Query): String = {
     q match {
+      case All => "all"
       case SEQ(path, s) => s"""${print(path)} = "$s""""
       case SNEQ(path, s) => s"""${print(path)} != "$s""""
       case StartsWith(path, s) => s"""${print(path)} starts with "$s""""
