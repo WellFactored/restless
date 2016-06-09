@@ -41,12 +41,7 @@ object Selection {
     }
   }
 
-  implicit def jsSortFn(po: Option[Path]): (JsObject, JsObject) => Boolean = po match {
-    case None => (a, b) => false
-    case Some(p) => jsSortFn(p)
-  }
-
-  def project(o: JsObject, path: Path): JsValue = {
+  def project(o: JsValue, path: Path): JsValue = {
     import play.api.libs.json._
 
     path.names.foldLeft(o: JsValue) {
@@ -58,8 +53,12 @@ object Selection {
     }
   }
 
+  implicit def jsSortFn(po: Option[Path]): (JsValue, JsValue) => Boolean = po match {
+    case None => (a, b) => false
+    case Some(p) => jsSortFn(p)
+  }
 
-  def jsSortFn(p: Path): (JsObject, JsObject) => Boolean = { (o1, o2) =>
+  def jsSortFn(p: Path): (JsValue, JsValue) => Boolean = { (o1, o2) =>
     import play.api.libs.json._
 
     (project(o1, p), project(o2, p)) match {
@@ -96,12 +95,12 @@ object Selection {
       .reverse(rev)
   }
 
-  def selectFromJson(js: Seq[JsObject], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int], sortKey: Option[Path], rev: Option[Boolean]): Seq[JsValue] = {
+  def selectFromJson(js: Seq[JsValue], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int], sortKey: Option[Path], rev: Option[Boolean]): Iterable[JsValue] = {
 
-    val projection: JsObject => JsValue = eo.map {
+    val projection: JsValue => JsValue = eo.map {
       paths =>
-        new JsonProjector[JsObject](paths.map(_.names)).project(_)
-    }.getOrElse(new JsonIdentity[JsObject].project(_))
+        new JsonProjector[JsValue](paths.map(_.names)).project(_)
+    }.getOrElse(new JsonIdentity[JsValue].project(_))
 
     def isEmpty(jv: JsValue): Boolean = jv match {
       case JsObject(e) if e.isEmpty => true
@@ -118,6 +117,5 @@ object Selection {
       .distinct
       .limit(maxResults)
       .reverse(rev)
-      .toSeq
   }
 }

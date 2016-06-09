@@ -15,11 +15,11 @@ object Selector {
     }
   }
 
-  implicit class JsSelect(js: Seq[JsObject]) {
+  implicit class JsSelect(js: Seq[JsValue]) {
     def jsSelect(params: Params): SearchResults[JsValue] = {
       import params._
 
-      val results = selectFromJson(js, params.query, params.fields, params.max_results, params.sort_by, params.reverse)
+      val results = selectFromJson(js, params.query, params.fields, params.max_results, params.sort_by, params.reverse).toSeq
 
       val page = ResultsPage.build(results, PageNumber(page_number.getOrElse(1)), max_results.getOrElse(Int.MaxValue), ItemCount(page_size.getOrElse(50)))
       SearchResults(page.resultsForPage.toList, page.resultCount, page.currentPage.num, page.perPage.count)

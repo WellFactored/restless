@@ -3,7 +3,7 @@ package com.wellfactored.restless.play.actions
 import atto.ParseResult.Done
 import com.wellfactored.restless.query.QueryAST.Path
 import com.wellfactored.restless.query.QueryParser
-import play.api.libs.json.{JsArray, JsObject, Json, Writes}
+import play.api.libs.json._
 import play.api.mvc.Results._
 import play.api.mvc._
 
@@ -14,7 +14,7 @@ class CollectionRequest(val request: Request[String], val params: Params) extend
 
 object ApiActions extends BodyParsers {
 
-  def JsCollect(js: => Seq[JsObject]): Action[String] = Collection { implicit request =>
+  def JsCollect(js: => Seq[JsValue]): Action[String] = Collection { implicit request =>
     import Selector._
     Ok(Json.toJson(js.jsSelect(request.params)))
   }
