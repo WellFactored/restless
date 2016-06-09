@@ -76,8 +76,14 @@ object ApiActions extends BodyParsers {
     }
 
     val sortKey = params.get("sort_by").flatMap(_.headOption.map(Path(_)))
+    val reverse: Option[Boolean] = params.get("reverse").flatMap {
+      _.headOption.map {
+        case "true" => true
+        case _ => false
+      }
+    }
 
-    Right(Params(pageNumber, pageSize, maxResults, query.map(_.right.get), fields, sortKey))
+    Right(Params(pageNumber, pageSize, maxResults, query.map(_.right.get), fields, sortKey, reverse))
   }
 
   def extractFromJson(implicit request: Request[String]): Either[Result, Params] = {

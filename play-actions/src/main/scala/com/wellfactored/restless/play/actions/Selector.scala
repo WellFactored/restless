@@ -19,7 +19,7 @@ object Selector {
     def jsSelect(params: Params): SearchResults[JsValue] = {
       import params._
 
-      val results = selectFromJson(js, params.query, params.fields, params.max_results, params.sort_by)
+      val results = selectFromJson(js, params.query, params.fields, params.max_results, params.sort_by, params.reverse)
 
       val page = ResultsPage.build(results, PageNumber(page_number.getOrElse(1)), max_results.getOrElse(Int.MaxValue), ItemCount(page_size.getOrElse(50)))
       SearchResults(page.resultsForPage.toList, page.resultCount, page.currentPage.num, page.perPage.count)
@@ -35,7 +35,7 @@ object Selector {
     def select[B](params: Params)(sortingKey: (T) => B)(implicit ordering: Ordering[B]): SearchResults[JsValue] = {
       import params._
 
-      val results = selectJson(ts, params.query, params.fields, params.max_results)(sortingKey).toSeq
+      val results = selectJson(ts, params.query, params.fields, params.max_results, params.reverse)(sortingKey).toSeq
       val page = ResultsPage.build(results, PageNumber(page_number.getOrElse(1)), max_results.getOrElse(Int.MaxValue), ItemCount(page_size.getOrElse(50)))
       SearchResults(page.resultsForPage.toList, page.resultCount, page.currentPage.num, page.perPage.count)
     }

@@ -22,6 +22,11 @@ object Selection {
         }
       }
     }
+
+    def reverse(ro: Option[Boolean]): Iterable[T] = ro match {
+      case Some(true) => xs.toSeq.reverse
+      case _ => xs
+    }
   }
 
   implicit def filterFn[T: Writes](qo: Option[Query]): T => Boolean = qo match {
@@ -53,6 +58,7 @@ object Selection {
     }
   }
 
+
   def jsSortFn(p: Path): (JsObject, JsObject) => Boolean = { (o1, o2) =>
     import play.api.libs.json._
 
@@ -66,7 +72,7 @@ object Selection {
     }
   }
 
-  def selectJson[T: Writes, B](ts: Iterable[T], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Iterable[JsValue] = {
+  def selectJson[T: Writes, B](ts: Iterable[T], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int], rev: Option[Boolean])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Iterable[JsValue] = {
 
     val projection: T => JsValue = eo.map {
       paths =>
@@ -87,9 +93,10 @@ object Selection {
       .filter(nonEmpty)
       .distinct
       .limit(maxResults)
+      .reverse(rev)
   }
 
-  def selectFromJson(js: Seq[JsObject], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int], sortKey: Option[Path]): Seq[JsValue] = {
+  def selectFromJson(js: Seq[JsObject], qo: Option[Query], eo: Option[List[Path]], maxResults: Option[Int], sortKey: Option[Path], rev: Option[Boolean]): Seq[JsValue] = {
 
     val projection: JsObject => JsValue = eo.map {
       paths =>
@@ -110,6 +117,7 @@ object Selection {
       .filter(nonEmpty)
       .distinct
       .limit(maxResults)
+      .reverse(rev)
       .toSeq
   }
 }

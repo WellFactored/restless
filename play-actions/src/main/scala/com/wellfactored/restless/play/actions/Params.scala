@@ -16,9 +16,10 @@ case class Params(
                    max_results: Option[Int],
                    query: Option[Query],
                    fields: Option[List[Path]],
-                   sort_by: Option[Path])
+                   sort_by: Option[Path],
+                   reverse:Option[Boolean])
 
 object Params {
-  val empty = Params(None, None, None, None, None, None)
+  val empty = Params(None, None, None, None, None, None, None)
   implicit val paramsR = Json.reads[Params]
 }
