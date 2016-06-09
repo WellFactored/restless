@@ -26,7 +26,6 @@ object Selector {
     }
   }
 
-
   /**
     * Pimp out any `Iterable[T : Writes]` with a `.select` method that will use query `Params` to filter
     * and project the collection.
@@ -35,7 +34,7 @@ object Selector {
     def select[B](params: Params)(sortingKey: (T) => B)(implicit ordering: Ordering[B]): SearchResults[JsValue] = {
       import params._
 
-      val results = selectJson(ts, params.query, params.fields, params.max_results, params.reverse)(sortingKey).toSeq
+      val results = selectT(ts, params.query, params.fields, params.max_results, params.reverse)(sortingKey).toSeq
       val page = ResultsPage.build(results, PageNumber(page_number.getOrElse(1)), max_results.getOrElse(Int.MaxValue), ItemCount(page_size.getOrElse(50)))
       SearchResults(page.resultsForPage.toList, page.resultCount, page.currentPage.num, page.perPage.count)
     }
