@@ -1,5 +1,6 @@
 package com.wellfactored.restless.play.json
 
+import com.wellfactored.restless.query.QueryAST.Path
 import play.api.libs.json._
 
 /**
@@ -28,29 +29,36 @@ class JsonIdentity[T: Writes] extends Projection[T, JsValue] {
   * @tparam T the type of the object that the projection will operate on. There must be
   *           an implicit json.Writes instance for T in scope when the class is instantiated.
   */
-class JsonProjector[T: Writes](paths: List[List[String]]) extends Projection[T, JsValue] {
+class JsonProjector[T: Writes](paths: List[Path]) extends Projection[T, JsValue] {
   override def project(o: T): JsValue = projectJs(Json.toJson(o))
 
   def projectJs(value: JsValue): JsValue = {
     val parts = paths.flatMap { path =>
       // Use the components of this path to walk down the json structure
-      val v = path.foldLeft(value) {
-        case (j, p) => j \ p match {
-          case JsDefined(JsObject(e)) if e.isEmpty => JsNull
-          case JsDefined(jv) => jv
-          case JsUndefined() => JsNull
-        }
-      }
-      v match {
+      JsonProjector.project(value, path) match {
         case JsNull => None
         // if the path has given us a json value then create a new json object structure
         // of the same shape as the original containing the extracted value. By reversing
         // the list of path elements we build the structure from the innermost part out.
-        case jv => Some(path.reverse.foldLeft(jv) { case (j, p) => JsObject(Seq(p -> j)) }.as[JsObject])
+        case jv => Some(path.names.reverse.foldLeft(jv) { case (j, p) => JsObject(Seq(p -> j)) }.as[JsObject])
       }
     }
 
     // Merge all of the resulting json objects back together to form our result
     parts.foldLeft(JsObject(Seq())) { case (o1, o2) => o1.deepMerge(o2) }
+  }
+}
+
+object JsonProjector {
+  def project(o: JsValue, path: Path): JsValue = {
+    import play.api.libs.json._
+
+    path.names.foldLeft(o: JsValue) {
+      case (j, p) => j \ p match {
+        case JsDefined(JsObject(e)) if e.isEmpty => JsNull
+        case JsDefined(jv) => jv
+        case JsUndefined() => JsNull
+      }
+    }
   }
 }

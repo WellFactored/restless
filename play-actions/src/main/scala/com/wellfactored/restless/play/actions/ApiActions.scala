@@ -3,7 +3,7 @@ package com.wellfactored.restless.play.actions
 import atto.ParseResult.Done
 import com.wellfactored.restless.query.QueryAST.Path
 import com.wellfactored.restless.query.QueryParser
-import play.api.libs.json.{JsArray, Json, Writes}
+import play.api.libs.json._
 import play.api.mvc.Results._
 import play.api.mvc._
 
@@ -13,6 +13,11 @@ import scala.util.{Failure, Success, Try}
 class CollectionRequest(val request: Request[String], val params: Params) extends WrappedRequest[String](request)
 
 object ApiActions extends BodyParsers {
+
+  def JsCollect(js: => Seq[JsValue]): Action[String] = Collection { implicit request =>
+    import Selector._
+    Ok(Json.toJson(js.jsSelect(request.params)))
+  }
 
   def Collect[T: Writes, B](xs: => Iterable[T])(sortKey: (T) => B)(implicit ordering: Ordering[B]): Action[String] = Collection { implicit request =>
     import Selector._
@@ -70,7 +75,15 @@ object ApiActions extends BodyParsers {
       }
     }
 
-    Right(Params(pageNumber, pageSize, maxResults, query.map(_.right.get), fields))
+    val sortKey = params.get("sort_by").flatMap(_.headOption.map(Path(_)))
+    val reverse: Option[Boolean] = params.get("reverse").flatMap {
+      _.headOption.map {
+        case "true" => true
+        case _ => false
+      }
+    }
+
+    Right(Params(pageNumber, pageSize, maxResults, query.map(_.right.get), fields, sortKey, reverse))
   }
 
   def extractFromJson(implicit request: Request[String]): Either[Result, Params] = {
