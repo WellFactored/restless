@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/WellFactored/restless.svg?style=svg)](https://circleci.com/gh/WellFactored/restless)
 [![Build Status](https://travis-ci.org/WellFactored/restless.svg?branch=master)](https://travis-ci.org/WellFactored/restless)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b8b7e2b4e1054aca93e5bec881f0183b)](https://www.codacy.com/app/doug/restless?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=WellFactored/restless&amp;utm_campaign=Badge_Grade)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.wellfactored/restless_2.11/badge.png)](https://maven-badges.herokuapp.com/maven-central/com.wellfactored/restless_2.11)
