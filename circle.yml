@@ -2,6 +2,10 @@ machine:
   java:
     version: openjdk8
 
+
 test:
   post:
-    - bash <(curl -s https://codecov.io/bash)
+    - sbt clean coverage test
+    - sbt coverageReport
+    - sbt coverageAggregate
+    - sbt codacyCoverage
