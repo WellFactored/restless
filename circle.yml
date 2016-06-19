@@ -5,4 +5,4 @@ machine:
 
 test:
   post:
-    - sbt coverage test coverageReport coverageAggregate codacyCoverage
+    - sbt clean coverage test coverageReport coverageAggregate codacyCoverage
