@@ -7,7 +7,7 @@ import com.wellfactored.restless.query.QueryAST._
 object QueryParser extends Whitespace {
 
   lazy val query: Parser[Query] = {
-    all.t | conjunction.t | comparison.t <~ endOfInput
+    all.t | conjunction.t | comparison.t | parens(query) <~ endOfInput
   }.named("query")
 
   lazy val conjunction: Parser[Conjunction] = {
