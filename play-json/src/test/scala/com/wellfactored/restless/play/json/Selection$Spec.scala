@@ -1,6 +1,5 @@
 package com.wellfactored.restless.play.json
 
-import com.wellfactored.restless.query.QueryAST
 import com.wellfactored.restless.query.QueryAST.Path
 import org.scalatest.{FlatSpec, Matchers}
 import play.api.libs.json.{JsObject, JsString, Json}
@@ -14,7 +13,7 @@ class Selection$Spec extends FlatSpec with Matchers {
   implicit val fooW = Json.writes[Foo]
 
 
-  "selectJson" should "sort by id" in {
+  "selectT" should "sort by id" in {
     val foos = Seq(Foo(2), Foo(1))
     val expected = Seq(Foo(1), Foo(2)).map(Json.toJson(_))
     selectT(foos, None, None, None, None)(_.id) shouldBe expected

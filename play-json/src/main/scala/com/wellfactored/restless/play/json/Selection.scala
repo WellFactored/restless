@@ -54,22 +54,23 @@ object Selection {
   }.getOrElse(new JsonIdentity[T].project(t))
 
 
-  implicit def jsSortFn(po: Option[Path]): (JsValue, JsValue) => Boolean = po match {
-    case None => (a, b) => false
-    case Some(p) => jsSortFn(p)
+  def jsSortFn(po: Option[Path], rev: Boolean): (JsValue, JsValue) => Boolean = po match {
+    case None => (a, b) => rev
+    case Some(p) => jsSortFn(p, rev)
   }
 
-  def jsSortFn(p: Path): (JsValue, JsValue) => Boolean = { (o1, o2) =>
+  def jsSortFn(p: Path, rev: Boolean): (JsValue, JsValue) => Boolean = { (o1, o2) =>
     import play.api.libs.json._
     import JsonProjector.project
 
     (project(o1, p), project(o2, p)) match {
-      case (n1: JsNumber, n2: JsNumber) => n1.value < n2.value
-      case (s1: JsString, s2: JsString) => s1.value < s2.value
-      case (b1: JsBoolean, b2: JsBoolean) => b1.value < b2.value
-      case (JsNull, JsNull) => false // neither object has the key so keep original order
+      case (n1: JsNumber, n2: JsNumber) => (n1.value < n2.value) ^ rev
+      case (s1: JsString, s2: JsString) => (s1.value < s2.value) ^ rev
+      case (b1: JsBoolean, b2: JsBoolean) => (b1.value < b2.value) ^ rev
+      case (JsNull, JsNull) => true // neither object has the key so keep original order
       case (_, JsNull) => true // sort objects without the key after those with the keys
-      case _ => false //  JsObjects, JsArrays and mixed types keep original order
+      case (JsNull, _) => false // sort objects without the key after those with the keys
+      case _ => rev //  JsObjects, JsArrays and mixed types keep original order
     }
   }
 
@@ -85,11 +86,10 @@ object Selection {
 
   def selectFromJson(js: Seq[JsValue], qo: Option[Query], po: Option[List[Path]], maxResults: Option[Int], sortKey: Option[Path], rev: Option[Boolean]): Iterable[JsValue] = {
     js.where(qo).toSeq
-      .sortWith(sortKey)
+      .sortWith(jsSortFn(sortKey, rev.getOrElse(false)))
       .map(projection(po, _))
       .filter(nonEmpty)
       .distinct
       .limit(maxResults)
-      .reverse(rev)
   }
 }
